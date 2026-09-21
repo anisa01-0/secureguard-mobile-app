@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description"
+        content="SecureGuard - a personal safety and emergency assistance application. Your Safety. One Tap Away.">
+  <meta name="theme-color" content="#0D1B39">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SecureGuard">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>SecureGuard - Your Safety. One Tap Away.</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #0D1B39;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* A branded loading screen shown while the Flutter engine starts up,
+       so the web demonstration never begins on a blank page. */
+    #loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      background: linear-gradient(135deg, #1B2F57 0%, #07122A 100%);
+      color: #ffffff;
+      transition: opacity 400ms ease;
+      z-index: 10;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+
+    #loading .mark {
+      width: 88px;
+      height: 104px;
+      display: grid;
+      place-items: center;
+    }
+    #loading .name {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+    }
+    #loading .name span { opacity: 0.72; }
+    #loading .tagline {
+      font-size: 13px;
+      opacity: 0.72;
+      letter-spacing: 0.4px;
+      margin-top: -14px;
+    }
+    #loading .bar {
+      width: 148px;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+    #loading .bar i {
+      display: block;
+      width: 40%;
+      height: 100%;
+      border-radius: 4px;
+      background: #ffffff;
+      animation: slide 1.25s ease-in-out infinite;
+    }
+    @keyframes slide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(350%); }
+    }
+    #loading .note {
+      position: absolute;
+      bottom: 26px;
+      font-size: 11px;
+      opacity: 0.45;
+      letter-spacing: 0.4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="mark">
+      <svg width="88" height="104" viewBox="0 0 88 104" fill="none"
+           xmlns="http://www.w3.org/2000/svg" aria-label="SecureGuard logo">
+        <path d="M44 0 L84.5 15.6 L84.5 52 C84.5 79 66 96.7 44 104
+                 C22 96.7 3.5 79 3.5 52 L3.5 15.6 Z"
+              fill="#1B2F57" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+        <circle cx="44" cy="48" r="26" fill="none"
+                stroke="rgba(255,255,255,0.28)" stroke-width="3"/>
+        <path d="M31 48 L40.5 58 L59 35" stroke="#ffffff" stroke-width="9"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="name">Secure<span>Guard</span></div>
+    <div class="tagline">Your Safety. One Tap Away.</div>
+    <div class="bar"><i></i></div>
+    <div class="note">University Prototype &bull; v1.0.0</div>
+  </div>
+
+  <script>
+    {{flutter_js}}
+    {{flutter_build_config}}
+
+    _flutter.loader.load({
+      config: {
+        // Use the CanvasKit copy bundled with this build instead of the
+        // Google CDN, so the application also runs without internet access
+        // during the demonstration.
+        canvasKitBaseUrl: "canvaskit/"
+      },
+      onEntrypointLoaded: async function (engineInitializer) {
+        const appRunner = await engineInitializer.initializeEngine();
+        await appRunner.runApp();
+
+        const loading = document.getElementById("loading");
+        loading.classList.add("hidden");
+        setTimeout(() => loading.remove(), 450);
+      }
+    });
+  </script>
+</body>
+</html>
