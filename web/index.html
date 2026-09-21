@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="$FLUTTER_BASE_HREF">
+  <!--
+    No <base> tag is shipped. Flutter resolves every asset against
+    `document.baseURI`, so a base href baked in at build time breaks the app
+    whenever it is served from anywhere other than that exact path. The script
+    at the bottom of this file finds the directory the app was actually served
+    from and inserts the correct <base> before the engine loads, so one build
+    runs at a site root, in a sub-folder, or on a static preview host.
+
+    The build-time value is kept here as a hint for the probe to try.
+  -->
+  <meta name="sg-build-base" content="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -17,7 +27,7 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <title>SecureGuard - Your Safety. One Tap Away.</title>
+  <title>SecureGuard</title>
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -32,7 +42,7 @@
     }
 
     /* A branded loading screen shown while the Flutter engine starts up,
-       so the web demonstration never begins on a blank page. */
+       so the application never begins on a blank page. */
     #loading {
       position: fixed;
       inset: 0;
@@ -92,6 +102,35 @@
       opacity: 0.45;
       letter-spacing: 0.4px;
     }
+
+    /* Shown instead of a blank page if the engine cannot start, so a failure
+       reports what actually went wrong rather than hanging on the splash. */
+    #startup-error {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      padding: 28px 22px;
+      overflow: auto;
+      background: #0D1B39;
+      color: #ffffff;
+    }
+    #startup-error h1 { font-size: 19px; margin: 0; }
+    #startup-error p  { font-size: 13.5px; line-height: 1.5; opacity: 0.8; margin: 0; }
+    #startup-error pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -114,26 +153,112 @@
     <div class="note">University Prototype &bull; v1.0.0</div>
   </div>
 
+  <div id="startup-error">
+    <h1>SecureGuard could not start</h1>
+    <p>The application files could not be loaded from this address. The
+       details below say exactly what failed.</p>
+    <pre id="startup-error-detail"></pre>
+  </div>
+
   <script>
     {{flutter_js}}
     {{flutter_build_config}}
 
-    _flutter.loader.load({
-      config: {
-        // Use the CanvasKit copy bundled with this build instead of the
-        // Google CDN, so the application also runs without internet access
-        // during the demonstration.
-        canvasKitBaseUrl: "canvaskit/"
-      },
-      onEntrypointLoaded: async function (engineInitializer) {
-        const appRunner = await engineInitializer.initializeEngine();
-        await appRunner.runApp();
+    (function () {
+      "use strict";
 
-        const loading = document.getElementById("loading");
-        loading.classList.add("hidden");
-        setTimeout(() => loading.remove(), 450);
+      var loading = document.getElementById("loading");
+
+      function fail(detail) {
+        document.getElementById("startup-error-detail").textContent = detail;
+        document.getElementById("startup-error").style.display = "flex";
+        if (loading) loading.style.display = "none";
       }
-    });
+
+      // Flutter resolves every asset against `document.baseURI`. The build
+      // bakes in a fixed base href, which is wrong whenever the app is served
+      // from a sub-path. Probe for the directory that actually holds
+      // version.json and point the <base> element at it before loading.
+      function resolveBaseUrl() {
+        var here = window.location.href.split(/[?#]/)[0];
+        var hint = document.querySelector('meta[name="sg-build-base"]');
+        var candidates = [
+          new URL("./", here).toString(),                 // served as a directory
+          new URL(here.replace(/\/?$/, "/")).toString(),  // no trailing slash
+        ];
+        if (hint && hint.content) {
+          // The path passed to `flutter build web --base-href`, if any.
+          candidates.push(new URL(hint.content, here).toString());
+        }
+
+        // Remove duplicates while preserving order.
+        candidates = candidates.filter(function (value, index) {
+          return candidates.indexOf(value) === index;
+        });
+
+        var tried = [];
+
+        function attempt(index) {
+          if (index >= candidates.length) {
+            return Promise.reject(
+              new Error("None of these locations served version.json:\n  " +
+                        tried.join("\n  "))
+            );
+          }
+          var base = candidates[index];
+          var probe = new URL("version.json", base).toString();
+          return fetch(probe, { cache: "no-store" })
+            .then(function (response) {
+              if (response.ok) return base;
+              tried.push(probe + "  ->  HTTP " + response.status);
+              return attempt(index + 1);
+            })
+            .catch(function (error) {
+              if (error instanceof Error && error.message.indexOf("None of these") === 0) {
+                throw error;
+              }
+              tried.push(probe + "  ->  " + error);
+              return attempt(index + 1);
+            });
+        }
+
+        return attempt(0);
+      }
+
+      resolveBaseUrl()
+        .then(function (base) {
+          // Flutter reads document.baseURI when it loads, so the element has
+          // to exist before the call below.
+          var baseElement = document.createElement("base");
+          baseElement.href = base;
+          document.head.insertBefore(baseElement, document.head.firstChild);
+
+          return _flutter.loader.load({
+            config: {
+              // Use the CanvasKit copy bundled with this build instead of the
+              // Google CDN, so the application also runs without internet
+              // access during a demonstration.
+              canvasKitBaseUrl: "canvaskit/"
+            },
+            onEntrypointLoaded: function (engineInitializer) {
+              return engineInitializer.initializeEngine()
+                .then(function (appRunner) { return appRunner.runApp(); })
+                .then(function () {
+                  loading.classList.add("hidden");
+                  setTimeout(function () { loading.remove(); }, 450);
+                });
+            }
+          });
+        })
+        .catch(function (error) {
+          fail(
+            "Page address:\n  " + window.location.href +
+            "\n\nError:\n  " + (error && error.stack ? error.stack : error) +
+            "\n\nBrowser:\n  " + navigator.userAgent +
+            "\n\nWebAssembly available: " + (typeof WebAssembly !== "undefined")
+          );
+        });
+    })();
   </script>
 </body>
 </html>

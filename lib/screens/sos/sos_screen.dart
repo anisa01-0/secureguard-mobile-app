@@ -355,8 +355,19 @@ class _CountdownView extends StatelessWidget {
     HapticFeedback.mediumImpact();
     context.read<EmergencyProvider>().cancelCountdown();
     AppFeedback.info(context, 'Emergency alert cancelled. Nobody was alerted.');
-    Navigator.of(context).maybePop();
+    _leaveSosScreen(context);
   }
+}
+
+/// Closes the SOS screen after the user has chosen to leave it.
+///
+/// `maybePop` must not be used here: it consults the [PopScope] above, whose
+/// `canPop` still holds the value from the frame before the alert was
+/// cancelled, so the pop would be blocked and the user left on this screen
+/// looking at a warning meant for the system back gesture.
+void _leaveSosScreen(BuildContext context) {
+  final NavigatorState navigator = Navigator.of(context);
+  if (navigator.canPop()) navigator.pop();
 }
 
 /// The large circular countdown with a sweeping progress ring.
@@ -700,7 +711,7 @@ class _ActiveView extends StatelessWidget {
       note: 'Emergency ended by the user. Marked as safe.',
     );
     AppFeedback.success(context, 'Emergency ended. Your contacts were told.');
-    Navigator.of(context).maybePop();
+    _leaveSosScreen(context);
   }
 }
 

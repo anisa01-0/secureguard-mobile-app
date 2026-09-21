@@ -309,6 +309,47 @@ void main() {
       expect(emergency.notifiedContacts, isEmpty);
     });
 
+    testWidgets('cancelling the countdown closes the SOS screen', (
+      WidgetTester tester,
+    ) async {
+      TestApp.phoneSurface(tester);
+      await tester.pumpWidget(
+        TestApp.wrap(
+          Scaffold(
+            body: Builder(
+              builder: (BuildContext context) => Center(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => const SosScreen()),
+                  ),
+                  child: const Text('Open SOS'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await tester.tap(find.text('Open SOS'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 700));
+      expect(find.byType(SosScreen), findsOneWidget);
+
+      await _holdSosButton(tester);
+      expect(find.text('CANCEL ALERT'), findsOneWidget);
+
+      await tester.tap(find.text('CANCEL ALERT'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 700));
+
+      // The screen must actually close: PopScope still holds the previous
+      // frame's canPop, so a maybePop here would silently leave the user on
+      // the SOS screen looking at a warning.
+      expect(find.byType(SosScreen), findsNothing);
+      expect(find.text('Open SOS'), findsOneWidget);
+    });
+
     testWidgets('a completed countdown notifies the trusted contacts', (
       WidgetTester tester,
     ) async {
