@@ -27,10 +27,10 @@ Analyzing secureguard-mobile-app...
 No issues found!
 
 $ flutter test
-00:13 +78: All tests passed!
+00:13 +79: All tests passed!
 ```
 
-**78 automated tests, all passing. Zero analyzer issues.**
+**79 automated tests, all passing. Zero analyzer issues.**
 
 | Test suite | File | Tests | Status |
 |---|---|---:|---|
@@ -39,8 +39,8 @@ $ flutter test
 | Trusted contact management | `test/contacts_provider_test.dart` | 11 | ✅ Pass |
 | Authentication service | `test/auth_service_test.dart` | 10 | ✅ Pass |
 | SOS flow, history and location sharing | `test/emergency_flow_test.dart` | 12 | ✅ Pass |
-| Screens and user interactions | `test/widget_flow_test.dart` | 21 | ✅ Pass |
-| **Total** | | **78** | **✅ All pass** |
+| Screens and user interactions | `test/widget_flow_test.dart` | 22 | ✅ Pass |
+| **Total** | | **79** | **✅ All pass** |
 
 The SOS tests use `fake_async` so the three-second hold, the five-second
 countdown and the per-contact dispatch delays run instantly instead of making
@@ -149,6 +149,8 @@ result is traceable:
 | T-34 | SOS without contacts | Blocked and explained | Start refused with `noContacts`; the UI offers to add one | Automated — `emergency_flow_test` | ✅ Pass |
 | T-35 | Emergency is reachable from any tab | A persistent indicator | Red banner *"Emergency active • contacts notified"* above every tab, with OPEN | Manual | ✅ Pass |
 | T-36 | An alert raises notifications | Notification centre updated | Notification count increased after activation | Automated — `emergency_flow_test` | ✅ Pass |
+| T-36a | Cancel closes the SOS screen | The user is returned to where they came from | Screen closed and the dashboard was shown with the cancellation message | Automated — `widget_flow_test`; Manual | ✅ Pass |
+| T-36b | A short press does not arm SOS | Nothing happens below the 3-second hold | Hold ring reset; no countdown started | Manual | ✅ Pass |
 
 ### 4.4 Location
 
@@ -233,6 +235,8 @@ submission.
 | 6 | The onboarding button read "→ Next", with the arrow leading the label. | Screenshot review | Reordered so the label leads and the arrow follows. |
 | 7 | The web build fetched its rendering engine from a CDN and rendered nothing without internet access. | Offline browser test | Configured the build to use the locally bundled engine, so the demo runs offline. |
 | 8 | Signing in to the demo account with a mistyped password reported *"No account found for that email address"* instead of *"Incorrect password"*. | New `auth_service_test` case | The demo account is now matched on the email alone, so the password is validated separately. |
+| 9 | Pressing **CANCEL ALERT** cancelled the alert but left the user on the SOS screen showing the "cancel the alert first" warning. `maybePop` consults the `PopScope` above, whose `canPop` still held the value from the frame before the cancellation. | Driving the running app in a browser | Leaving the screen now pops directly instead of through `maybePop`; covered by a new widget test (T-36a). |
+| 10 | The web build baked `<base href="/">` into `index.html`, so the application only ran when served from a site root and showed a blank screen from any sub-path. | Hosting the build under a nested path | No base tag ships; the page probes for the directory it was actually served from and inserts the correct base before the engine loads. A startup-error panel now reports the address and error instead of hanging on the splash. |
 
 ---
 
@@ -252,14 +256,14 @@ submission.
 
 | Metric | Result |
 |---|---|
-| Automated tests | 78 |
-| Automated tests passing | 78 (100%) |
+| Automated tests | 79 |
+| Automated tests passing | 79 (100%) |
 | Analyzer issues | 0 |
-| Documented test cases | 69 |
-| Documented test cases passing | 69 (100%) |
+| Documented test cases | 71 |
+| Documented test cases passing | 71 (100%) |
 | Accessibility checks | 6 of 6 passed |
-| Defects found during testing | 8 |
-| Defects fixed | 8 |
+| Defects found during testing | 10 |
+| Defects fixed | 10 |
 | Known open defects | 0 |
 
 All planned functionality behaves as specified. The remaining gaps are the

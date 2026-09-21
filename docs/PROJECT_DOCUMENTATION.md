@@ -119,7 +119,7 @@ while protecting against accidental activation.
 | 7 | Keep a permanent record of safety events | Emergency History with filtering and a detail view |
 | 8 | Deliver an accessible, responsive interface | Material 3 themes, large targets, icon + text labels, width capping |
 | 9 | Collect minimal personal data and explain what is stored | Privacy & data screen; local-only storage |
-| 10 | Validate the implementation | 78 automated tests; documented test plan |
+| 10 | Validate the implementation | 79 automated tests; documented test plan |
 
 ---
 
@@ -205,7 +205,7 @@ control, and no dependency on a network connection to open the interface.
 | NFR-12 | Responsiveness | The layout must work from small phones to tablets and desktop browsers. | `Responsive` breakpoints; content width capped at 560 dp and centred. |
 | NFR-13 | Maintainability | UI, state, logic and data must be separated. | Four-layer architecture (see §11). |
 | NFR-14 | Maintainability | The code must pass static analysis with no issues. | `flutter analyze` → *No issues found!* |
-| NFR-15 | Testability | Core logic must be covered by automated tests. | 78 tests across six suites. |
+| NFR-15 | Testability | Core logic must be covered by automated tests. | 79 tests across six suites. |
 | NFR-16 | Privacy | Only data required for the safety function may be collected. | Name, email, phone, contacts, position, history — nothing else. |
 | NFR-17 | Security | Sensitive input must be masked by default. | Password fields are obscured with an explicit show/hide control. |
 | NFR-18 | Transparency | The prototype's limits must be visible to the user. | About and Privacy screens; banners on every simulated feature. |
@@ -550,7 +550,7 @@ All twenty-eight functional requirements are satisfied: twenty-five fully, and
 three through documented simulations of services a student project cannot pay
 for. The non-functional requirements around usability, accessibility,
 reliability, maintainability and testability are met and evidenced by a clean
-static analysis and 78 passing automated tests.
+static analysis and 79 passing automated tests.
 
 The engineering contribution is the layered architecture that isolates every
 simulation behind a single service class, so the prototype can become a real

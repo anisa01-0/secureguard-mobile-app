@@ -34,6 +34,22 @@ Built with Flutter • Material 3 • Final-year university project
 
 ---
 
+## Submission Index
+
+Every document that accompanies this project, in one place.
+
+| Deliverable | Where |
+|---|---|
+| **Source code** | [`lib/`](lib/) — 59 Dart files across models, data, services, providers, screens, widgets, theme and utils |
+| **Project documentation** | [`docs/PROJECT_DOCUMENTATION.md`](docs/PROJECT_DOCUMENTATION.md) — introduction, background, aim, objectives, requirements, architecture, data model, user flow, security, limitations |
+| **Test plan and results** | [`docs/TESTING.md`](docs/TESTING.md) — 79 automated tests plus a documented test case table with the evidence for each result |
+| **Screenshots of every screen** | [`docs/screenshots/`](docs/screenshots/) — captured from the running application |
+| **Automated tests** | [`test/`](test/) — six suites |
+| **Setup and run instructions** | [Installation](#7-installation) and [How to Run](#8-how-to-run) below |
+| **Demo credentials** | [Demo Login](#9-demo-login) below |
+
+---
+
 ## 1. Project Overview
 
 **SecureGuard** is a mobile application that helps people respond quickly when
@@ -128,7 +144,7 @@ smallest possible number of actions.
 | State management | **provider 6** (`ChangeNotifier`) | Simple and readable — easy to explain in a viva, unlike heavier alternatives. |
 | Persistence | **shared_preferences 2** | Key/value storage for contacts, history, notifications and settings. |
 | Platform calls | **url_launcher 6** | Opens the device dialler and SMS composer. |
-| Testing | **flutter_test**, **fake_async** | 78 unit and widget tests, including timer-driven SOS flows. |
+| Testing | **flutter_test**, **fake_async** | 79 unit and widget tests, including timer-driven SOS flows. |
 | Linting | **flutter_lints 6** | Enforces the standard Dart/Flutter style; the project has zero analyzer issues. |
 
 Only three runtime dependencies are used. Date formatting, the map view and the
@@ -211,6 +227,25 @@ cd build/web && python3 -m http.server 8080
 flutter analyze   # static analysis (expected: "No issues found!")
 flutter test      # full test suite  (expected: "All tests passed!")
 ```
+
+### What was verified, and where
+
+Being precise about this matters more than claiming everything was tested
+everywhere:
+
+| Check | Status |
+|---|---|
+| `flutter analyze` | ✅ Run — no issues found |
+| `flutter test` (79 tests) | ✅ Run — all passing |
+| `flutter build web --release` | ✅ Run — build succeeds |
+| The application driven by hand in a browser at 390 × 844 | ✅ Done — see [`docs/TESTING.md`](docs/TESTING.md) |
+| `flutter build apk` / `flutter build ios` | ⚠️ Not run — the Android and iOS SDKs were not installed on the development machine used |
+
+The Android and iOS folders are the standard Flutter project scaffolding, with
+only the application label, launcher icons and the dialler/SMS intent
+declarations changed, so both builds are expected to work on a machine with
+the matching SDK installed. They have simply not been executed here, and this
+table says so rather than implying otherwise.
 
 ---
 
@@ -365,7 +400,7 @@ secureguard-mobile-app/
 │   ├── auth_service_test.dart         # 10 tests
 │   ├── contacts_provider_test.dart    # 11 tests
 │   ├── emergency_flow_test.dart       # 12 tests (SOS state machine)
-│   ├── widget_flow_test.dart          # 21 widget tests
+│   ├── widget_flow_test.dart          # 22 widget tests
 │   └── helpers/test_app.dart          # Shared test scaffolding
 │
 ├── docs/
@@ -386,7 +421,7 @@ data — so any one layer can be changed without touching the others.
 
 ## 12. Testing
 
-The project has an automated suite of **78 tests** covering validation rules,
+The project has an automated suite of **79 tests** covering validation rules,
 the SOS state machine, contact management, location sharing and the user
 interface itself.
 
@@ -395,7 +430,7 @@ flutter test
 ```
 
 ```
-00:13 +78: All tests passed!
+00:13 +79: All tests passed!
 ```
 
 Static analysis is also clean:
@@ -415,7 +450,7 @@ verified, is in **[`docs/TESTING.md`](docs/TESTING.md)**. A short summary:
 |---|---|---|
 | Authentication | 14 | ✅ Pass |
 | Trusted contacts | 12 | ✅ Pass |
-| SOS activation and cancellation | 13 | ✅ Pass |
+| SOS activation and cancellation | 15 | ✅ Pass |
 | Location sharing | 7 | ✅ Pass |
 | Emergency services | 4 | ✅ Pass |
 | History and notifications | 7 | ✅ Pass |
