@@ -39,7 +39,7 @@ afterwards.
 
 This document describes the requirements, design, architecture and boundaries
 of the system. It accompanies a complete, runnable Flutter application of
-fifteen screens with an automated test suite.
+twenty screens with an automated test suite.
 
 The application is a **prototype built for academic assessment**. Features that
 would require paid external services are simulated, and every simulation is
@@ -541,7 +541,7 @@ prototype during a genuine emergency.
 
 This project set out to build a mobile application that shortens the distance
 between a person in danger and the help they need. The result is SecureGuard: a
-complete Flutter application of fifteen screens in which a user can sign in,
+complete Flutter application of twenty screens in which a user can sign in,
 hold one button for three seconds, cancel if it was a mistake, and otherwise
 have every trusted contact alerted with their live location — with the whole
 incident recorded for afterwards.

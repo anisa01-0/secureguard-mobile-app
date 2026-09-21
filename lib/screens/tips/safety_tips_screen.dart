@@ -76,8 +76,10 @@ class _SafetyTipsScreenState extends State<SafetyTipsScreen>
             if (inCategory.isEmpty) {
               return EmptyState(
                 icon: category.icon,
-                title: 'No tips yet',
-                message: 'Advice for ${category.label} is coming soon.',
+                title: 'No tips in this category',
+                message:
+                    'Choose another category to read SecureGuard’s '
+                    'safety advice.',
                 compact: true,
               );
             }

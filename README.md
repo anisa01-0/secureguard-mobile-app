@@ -43,7 +43,7 @@ trust, their live location, direct numbers for the emergency services, and a
 record of everything that happened.
 
 The application was built as a final-year university mobile-development
-project. It is a complete, runnable Flutter application with fifteen screens,
+project. It is a complete, runnable Flutter application with twenty screens,
 working navigation, local data persistence, form validation, an automated test
 suite and light/dark themes. Where a feature would normally require a paid
 backend service — SMS gateways, push notifications, a map SDK or a real GPS
@@ -241,7 +241,7 @@ accounts are stored on the device only.
 
 ## 10. Application Screens
 
-Fifteen screens, all reachable and all complete.
+Twenty screens, all reachable and all complete.
 
 | # | Screen | Purpose |
 |---|---|---|
@@ -252,14 +252,19 @@ Fifteen screens, all reachable and all complete.
 | 5 | **Forgot Password** | Reset-link request with an honest note that no mail server exists in the prototype. |
 | 6 | **Dashboard (Home)** | Greeting, safety-status card, the large SOS button, quick actions, trusted contacts, location summary and recent activity. |
 | 7 | **SOS Emergency** | Countdown with cancel, dispatch progress, then the live alert view with time, location, contacts notified and end-emergency controls. |
-| 8 | **Trusted Contacts** | Full contact management with primary-contact selection and duplicate-number protection. |
+| 8 | **Trusted Contacts** | Full contact management, with an add/edit sheet, primary-contact selection and duplicate-number protection. |
 | 9 | **Emergency Services** | Police, ambulance, fire and hotline services grouped by category, each with a call button. |
 | 10 | **Live Location** | Map view, coordinates, accuracy, start/stop sharing and the list of contacts currently receiving the location. |
 | 11 | **Safety Tips** | Five tabbed categories with fifteen expandable advice cards. |
 | 12 | **Emergency History** | Filterable event log with a summary of totals. |
 | 13 | **Event Details** | Full record of one event: timeline, map, contacts notified and notes. |
 | 14 | **Notifications** | Notification centre with unread state, dismiss and mark-all-read. |
-| 15 | **Profile / Settings / About / Privacy / Edit Profile / Change Password** | Account details, protection statistics and every preference, plus the About and Privacy statements. |
+| 15 | **Profile** | Avatar, personal details, protection statistics and account shortcuts. |
+| 16 | **Edit Profile** | Update name, email, phone, blood group and home area. |
+| 17 | **Settings** | Notifications, location permission, SOS countdown, dark mode, language, privacy and demo-data reset. |
+| 18 | **Change Password** | Current and new password with strength rules. |
+| 19 | **About SecureGuard** | Product information, feature summary and the prototype-scope statement. |
+| 20 | **Privacy & Data** | What is stored, what is never collected, and an honest security statement. |
 
 Screenshots of each screen are in [`docs/screenshots/`](docs/screenshots/),
 captured from the running application.
@@ -463,7 +468,7 @@ its own scope.
 
 ### Fully implemented and working
 
-- Complete navigation across all fifteen screens, including bottom navigation
+- Complete navigation across all twenty screens, including bottom navigation
   with preserved tab state
 - Sign in, registration, password change and logout against locally stored
   accounts
