@@ -237,6 +237,7 @@ submission.
 | 8 | Signing in to the demo account with a mistyped password reported *"No account found for that email address"* instead of *"Incorrect password"*. | New `auth_service_test` case | The demo account is now matched on the email alone, so the password is validated separately. |
 | 9 | Pressing **CANCEL ALERT** cancelled the alert but left the user on the SOS screen showing the "cancel the alert first" warning. `maybePop` consults the `PopScope` above, whose `canPop` still held the value from the frame before the cancellation. | Driving the running app in a browser | Leaving the screen now pops directly instead of through `maybePop`; covered by a new widget test (T-36a). |
 | 10 | The web build baked `<base href="/">` into `index.html`, so the application only ran when served from a site root and showed a blank screen from any sub-path. | Hosting the build under a nested path | No base tag ships; the page probes for the directory it was actually served from and inserts the correct base before the engine loads. A startup-error panel now reports the address and error instead of hanging on the splash. |
+| 11 | On a wide window the quick-action tiles overflowed by 21–42 pixels, printing a `BOTTOM OVERFLOWED` stripe across the grid. The grid used a fixed `childAspectRatio`, so the tiles grew shorter as the four columns narrowed while the labels kept their size. | Running the app in a maximised desktop browser window | Each tile is now given a height derived from its content and the reader's font size (`mainAxisExtent`) rather than from the column width, and the wrapping label is `Flexible`, so a tile that is still too short shortens its label instead of overflowing. |
 
 ---
 
@@ -262,8 +263,8 @@ submission.
 | Documented test cases | 71 |
 | Documented test cases passing | 71 (100%) |
 | Accessibility checks | 6 of 6 passed |
-| Defects found during testing | 10 |
-| Defects fixed | 10 |
+| Defects found during testing | 11 |
+| Defects fixed | 11 |
 | Known open defects | 0 |
 
 All planned functionality behaves as specified. The remaining gaps are the

@@ -491,17 +491,34 @@ class _QuickActionsGrid extends StatelessWidget {
           title: 'Quick actions',
           subtitle: 'The tools you are most likely to need',
         ),
-        GridView.count(
-          crossAxisCount: columns,
+        // A fixed aspect ratio made the tiles shorter as the grid grew
+        // narrower, while their labels kept their size, so a two-line label
+        // such as "Emergency Services" ran out of the box. Give every tile a
+        // height that follows the text instead of the column width.
+        GridView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.08,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            mainAxisExtent: _tileHeight(context),
+          ),
           children: tiles,
         ),
       ],
     );
+  }
+
+  /// Height of one quick-action tile: the icon, both label lines and the
+  /// badge, plus the tile's own padding, grown with the reader's font size.
+  static double _tileHeight(BuildContext context) {
+    const double iconAndPadding = 32 + 42 + 12; // padding, icon, gap
+    const double labelLines = 2 * 21 + 3 + 18; // label, gap, badge
+    return iconAndPadding +
+        MediaQuery.textScalerOf(context)
+            .scale(labelLines)
+            .clamp(labelLines, labelLines * 2);
   }
 
   Future<void> _toggleSharing(

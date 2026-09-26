@@ -46,7 +46,13 @@ class QuickActionTile extends StatelessWidget {
               borderRadius: radius,
               border: Border.all(color: theme.colorScheme.outline),
             ),
+            // Only the label is `Flexible`: it is the one line that wraps, so
+            // it absorbs whatever height is left over and shortens itself
+            // rather than overflowing when the tile turns out to be short.
+            // The badge keeps its natural height, otherwise the two would
+            // halve the free space between them and both end up clipped.
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -60,11 +66,13 @@ class QuickActionTile extends StatelessWidget {
                   child: Icon(icon, color: accent, size: 22),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  label,
-                  style: theme.textTheme.titleSmall,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Flexible(
+                  child: Text(
+                    label,
+                    style: theme.textTheme.titleSmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (badge != null) ...<Widget>[
                   const SizedBox(height: 3),
