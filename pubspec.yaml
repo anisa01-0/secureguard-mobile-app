@@ -1,0 +1,31 @@
+name: secureguard
+description: "SecureGuard - A Mobile Application for Personal Safety and Emergency Assistance."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Simple, readable state management (ChangeNotifier + Provider).
+  provider: ^6.1.2
+
+  # Local persistence so demo data survives an app restart.
+  shared_preferences: ^2.3.2
+
+  # Used to open the phone dialler for emergency service calls.
+  url_launcher: ^6.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Runs timers instantly in the SOS countdown tests.
+  fake_async: ^1.3.2
+
+flutter:
+  uses-material-design: true
